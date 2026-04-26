@@ -4,12 +4,14 @@ using GoodHamburger.Api.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddSingleton<IMenuService, MenuService>();
+builder.Services.AddSingleton<IOrderService, OrderService>();
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
 app.MapOpenApi();
 app.MapMenuEndpoints();
+app.MapOrderEndpoints();
 
 app.Run();
 
