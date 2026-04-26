@@ -7,9 +7,16 @@ builder.AddServiceDefaults();
 builder.Services.AddSingleton<IMenuService, MenuService>();
 builder.Services.AddSingleton<IOrderService, OrderService>();
 builder.Services.AddOpenApi();
+builder.Services.AddCors(options =>
+    options.AddDefaultPolicy(policy =>
+        policy.WithOrigins(
+                builder.Configuration["AllowedOrigins"] ?? "http://localhost:5002")
+              .AllowAnyHeader()
+              .AllowAnyMethod()));
 
 var app = builder.Build();
 
+app.UseCors();
 app.MapDefaultEndpoints();
 app.MapOpenApi();
 app.MapMenuEndpoints();
