@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\GoodHamburger.Api\GoodHamburger.Api.csproj" IsAspireProjectResource="true" />
+    <ProjectReference Include="..\GoodHamburger.ServiceDefaults\GoodHamburger.ServiceDefaults.csproj" />
   </ItemGroup>
 
 </Project>
