@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoodHamburger.IntegrationTe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoodHamburger.AppHost", "src\GoodHamburger.AppHost\GoodHamburger.AppHost.csproj", "{B0FC9ACD-6B1D-4A5C-A7E4-D69DD60EA1E7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoodHamburger.ServiceDefaults", "src\GoodHamburger.ServiceDefaults\GoodHamburger.ServiceDefaults.csproj", "{5A8F21CA-23A4-42F6-A5C6-3B68FAB46D44}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -73,6 +75,18 @@ Global
 		{B0FC9ACD-6B1D-4A5C-A7E4-D69DD60EA1E7}.Release|x64.Build.0 = Release|Any CPU
 		{B0FC9ACD-6B1D-4A5C-A7E4-D69DD60EA1E7}.Release|x86.ActiveCfg = Release|Any CPU
 		{B0FC9ACD-6B1D-4A5C-A7E4-D69DD60EA1E7}.Release|x86.Build.0 = Release|Any CPU
+		{5A8F21CA-23A4-42F6-A5C6-3B68FAB46D44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A8F21CA-23A4-42F6-A5C6-3B68FAB46D44}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A8F21CA-23A4-42F6-A5C6-3B68FAB46D44}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{5A8F21CA-23A4-42F6-A5C6-3B68FAB46D44}.Debug|x64.Build.0 = Debug|Any CPU
+		{5A8F21CA-23A4-42F6-A5C6-3B68FAB46D44}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{5A8F21CA-23A4-42F6-A5C6-3B68FAB46D44}.Debug|x86.Build.0 = Debug|Any CPU
+		{5A8F21CA-23A4-42F6-A5C6-3B68FAB46D44}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A8F21CA-23A4-42F6-A5C6-3B68FAB46D44}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5A8F21CA-23A4-42F6-A5C6-3B68FAB46D44}.Release|x64.ActiveCfg = Release|Any CPU
+		{5A8F21CA-23A4-42F6-A5C6-3B68FAB46D44}.Release|x64.Build.0 = Release|Any CPU
+		{5A8F21CA-23A4-42F6-A5C6-3B68FAB46D44}.Release|x86.ActiveCfg = Release|Any CPU
+		{5A8F21CA-23A4-42F6-A5C6-3B68FAB46D44}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -82,5 +96,6 @@ Global
 		{00D06FE4-68DE-4D28-BEA6-EE3D870C1E8E} = {ABCCFA80-32C8-4669-8D2F-C83B6F48360C}
 		{BA1AC365-A231-425E-8CF9-3781ADD82098} = {ABCCFA80-32C8-4669-8D2F-C83B6F48360C}
 		{B0FC9ACD-6B1D-4A5C-A7E4-D69DD60EA1E7} = {4BAA6B1C-706A-4B8F-A100-AC3915D3B9C2}
+		{5A8F21CA-23A4-42F6-A5C6-3B68FAB46D44} = {4BAA6B1C-706A-4B8F-A100-AC3915D3B9C2}
 	EndGlobalSection
 EndGlobal
