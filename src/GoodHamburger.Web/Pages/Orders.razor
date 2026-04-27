@@ -74,7 +74,35 @@
             <button class="btn btn-outline-secondary btn-sm" @onclick="LoadOrdersAsync">↻ Atualizar</button>
         </div>
 
-        @if (_ordersLoading)
+        <!-- Busca por ID -->
+        <div class="input-group mb-3">
+            <input type="number" class="form-control" placeholder="Buscar por ID do pedido..."
+                   value="@_searchId"
+                   @oninput="OnSearchInput"
+                   @onkeydown="OnSearchKeyDown" min="1" />
+            <button class="btn btn-outline-primary" @onclick="SearchOrderAsync" disabled="@(_searchId is null)">
+                Buscar
+            </button>
+            @if (_searchResult is not null || _searchError is not null)
+            {
+                <button class="btn btn-outline-secondary" @onclick="ClearSearch">Limpar</button>
+            }
+        </div>
+
+        @if (_searchError is not null)
+        {
+            <div class="alert alert-warning py-2">@_searchError</div>
+        }
+        else if (_searchResult is not null)
+        {
+            <div class="alert alert-success py-2 mb-3">
+                Exibindo resultado da busca — <button class="btn btn-link btn-sm p-0" @onclick="ClearSearch">ver todos</button>
+            </div>
+            <div class="card mb-3 shadow-sm border-primary">
+                @OrderCard(_searchResult)
+            </div>
+        }
+        else if (_ordersLoading)
         {
             <p><em>Carregando pedidos...</em></p>
         }
@@ -87,35 +115,7 @@
             @foreach (var order in _orders)
             {
                 <div class="card mb-3 shadow-sm">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <span class="fw-bold">Pedido #@order.Id</span>
-                        <button class="btn btn-outline-danger btn-sm"
-                                @onclick="() => DeleteOrderAsync(order.Id)">
-                            Remover
-                        </button>
-                    </div>
-                    <div class="card-body">
-                        <ul class="list-unstyled mb-2">
-                            @foreach (var item in order.Items)
-                            {
-                                <li>@item.Name <span class="text-muted">@item.Price.ToString("C", _ptBR)</span></li>
-                            }
-                        </ul>
-                        <hr class="my-1" />
-                        <div class="d-flex justify-content-between small text-muted">
-                            <span>Subtotal</span><span>@order.Subtotal.ToString("C", _ptBR)</span>
-                        </div>
-                        @if (order.Discount > 0)
-                        {
-                            <div class="d-flex justify-content-between small text-success">
-                                <span>Desconto (@((order.DiscountPercent * 100).ToString("0"))%)</span>
-                                <span>-@order.Discount.ToString("C", _ptBR)</span>
-                            </div>
-                        }
-                        <div class="d-flex justify-content-between fw-bold">
-                            <span>Total</span><span>@order.Total.ToString("C", _ptBR)</span>
-                        </div>
-                    </div>
+                    @OrderCard(order)
                 </div>
             }
         }
@@ -132,6 +132,10 @@
     private List<GoodHamburger.Web.Models.MenuItemModel> _sides = [];
     private List<GoodHamburger.Web.Models.OrderModel> _orders = [];
     private List<string> _formErrors = [];
+
+    private int? _searchId;
+    private GoodHamburger.Web.Models.OrderModel? _searchResult;
+    private string? _searchError;
 
     private static readonly System.Globalization.CultureInfo _ptBR =
         System.Globalization.CultureInfo.GetCultureInfo("pt-BR");
@@ -199,6 +203,77 @@
     private async Task DeleteOrderAsync(int id)
     {
         await Api.DeleteOrderAsync(id);
+        if (_searchResult?.Id == id) ClearSearch();
         await LoadOrdersAsync();
     }
+
+    private async Task SearchOrderAsync()
+    {
+        if (_searchId is null) return;
+        _searchResult = null;
+        _searchError = null;
+        var (order, error) = await Api.GetOrderByIdAsync(_searchId.Value);
+        if (order is not null) _searchResult = order;
+        else _searchError = error;
+    }
+
+    private async Task OnSearchInput(ChangeEventArgs e)
+    {
+        var raw = e.Value?.ToString();
+        if (string.IsNullOrWhiteSpace(raw))
+        {
+            _searchId = null;
+            ClearSearch();
+            await LoadOrdersAsync();
+        }
+        else if (int.TryParse(raw, out var id))
+        {
+            _searchId = id;
+        }
+    }
+
+    private async Task OnSearchKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter") await SearchOrderAsync();
+    }
+
+    private void ClearSearch()
+    {
+        _searchId = null;
+        _searchResult = null;
+        _searchError = null;
+    }
+
+    private RenderFragment OrderCard(GoodHamburger.Web.Models.OrderModel order) =>
+        @<div>
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <span class="fw-bold">Pedido #@order.Id</span>
+                <button class="btn btn-outline-danger btn-sm"
+                        @onclick="() => DeleteOrderAsync(order.Id)">
+                    Remover
+                </button>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled mb-2">
+                    @foreach (var item in order.Items)
+                    {
+                        <li>@item.Name <span class="text-muted">@item.Price.ToString("C", _ptBR)</span></li>
+                    }
+                </ul>
+                <hr class="my-1" />
+                <div class="d-flex justify-content-between small text-muted">
+                    <span>Subtotal</span><span>@order.Subtotal.ToString("C", _ptBR)</span>
+                </div>
+                @if (order.Discount > 0)
+                {
+                    <div class="d-flex justify-content-between small text-success">
+                        <span>Desconto (@((order.DiscountPercent * 100).ToString("0"))%)</span>
+                        <span>-@order.Discount.ToString("C", _ptBR)</span>
+                    </div>
+                }
+                <div class="d-flex justify-content-between fw-bold">
+                    <span>Total</span><span>@order.Total.ToString("C", _ptBR)</span>
+                </div>
+            </div>
+        </div>;
 }

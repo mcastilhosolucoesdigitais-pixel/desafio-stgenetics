@@ -11,6 +11,16 @@ public sealed class ApiClient(HttpClient http)
     public Task<List<OrderModel>?> GetOrdersAsync() =>
         http.GetFromJsonAsync<List<OrderModel>>("orders");
 
+    public async Task<(OrderModel? Order, string? Error)> GetOrderByIdAsync(int id)
+    {
+        var response = await http.GetAsync($"orders/{id}");
+        if (response.IsSuccessStatusCode)
+            return (await response.Content.ReadFromJsonAsync<OrderModel>(), null);
+        if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+            return (null, $"Pedido #{id} não encontrado.");
+        return (null, "Erro ao buscar pedido.");
+    }
+
     public async Task<(OrderModel? Order, List<string>? Errors)> CreateOrderAsync(List<int> itemIds)
     {
         var response = await http.PostAsJsonAsync("orders", new { itemIds });
