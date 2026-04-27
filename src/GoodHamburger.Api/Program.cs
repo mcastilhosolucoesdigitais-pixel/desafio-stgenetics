@@ -1,5 +1,6 @@
 using GoodHamburger.Api.Endpoints;
 using GoodHamburger.Api.Services;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +20,8 @@ var app = builder.Build();
 app.UseCors();
 app.MapDefaultEndpoints();
 app.MapOpenApi();
+app.MapScalarApiReference("/docs");
+app.MapGet("/", () => Results.Redirect("/docs/v1")).ExcludeFromDescription();
 app.MapMenuEndpoints();
 app.MapOrderEndpoints();
 
