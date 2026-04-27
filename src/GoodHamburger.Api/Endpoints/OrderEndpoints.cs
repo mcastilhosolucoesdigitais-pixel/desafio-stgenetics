@@ -17,11 +17,15 @@ public static class OrderEndpoints
 
             return Results.Created($"/orders/{order!.Id}", ToResponse(order));
         })
+        .WithName("CreateOrder")
+        .WithSummary("Criar pedido")
         .Produces<OrderResponse>(StatusCodes.Status201Created)
         .Produces(StatusCodes.Status422UnprocessableEntity);
 
         group.MapGet("/", (IOrderService orderService) =>
             Results.Ok(orderService.GetAll().Select(ToResponse)))
+        .WithName("ListOrders")
+        .WithSummary("Listar todos os pedidos")
         .Produces<IEnumerable<OrderResponse>>();
 
         group.MapGet("/{id:int}", (int id, IOrderService orderService) =>
@@ -31,6 +35,8 @@ public static class OrderEndpoints
                 ? Results.NotFound(new { error = $"Order {id} not found." })
                 : Results.Ok(ToResponse(order));
         })
+        .WithName("GetOrderById")
+        .WithSummary("Consultar pedido por identificador")
         .Produces<OrderResponse>()
         .Produces(StatusCodes.Status404NotFound);
 
@@ -46,6 +52,8 @@ public static class OrderEndpoints
 
             return Results.Ok(ToResponse(order!));
         })
+        .WithName("UpdateOrder")
+        .WithSummary("Atualizar pedido")
         .Produces<OrderResponse>()
         .Produces(StatusCodes.Status404NotFound)
         .Produces(StatusCodes.Status422UnprocessableEntity);
@@ -57,6 +65,8 @@ public static class OrderEndpoints
                 ? Results.NoContent()
                 : Results.NotFound(new { error = $"Order {id} not found." });
         })
+        .WithName("DeleteOrder")
+        .WithSummary("Excluir pedido")
         .Produces(StatusCodes.Status204NoContent)
         .Produces(StatusCodes.Status404NotFound);
     }
